@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IconGitBranch } from "@tabler/icons-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { Field, FieldDescription, FieldLabel } from "./ui/field";
@@ -28,11 +29,15 @@ export function CreateWorkflow() {
   const onSubmit = async (data: z.infer<typeof postWorkflowSchema>) => {
     try {
       setIsSubmitting(true);
-      await postWorkflow({ name: data.name, description: data.description || undefined });
+      await postWorkflow({ name: data.name, description: data.description || "" });
       getWorkflows();
       onClose();
-    } catch (error) {
-      console.error(error);
+    } catch {
+      toast.error("Failed to create workflow", {
+        position: "top-center",
+        description: "Please try again",
+        closeButton: true,
+      });
     } finally {
       setIsSubmitting(false);
     }
