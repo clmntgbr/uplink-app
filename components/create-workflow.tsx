@@ -13,8 +13,9 @@ import { Field, FieldDescription, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 
 export function CreateWorkflow() {
-  const { postWorkflow, getWorkflows } = useWorkflow();
+  const { postWorkflow } = useWorkflow();
 
+  const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -30,8 +31,11 @@ export function CreateWorkflow() {
     try {
       setIsSubmitting(true);
       await postWorkflow({ name: data.name, description: data.description || "" });
-      getWorkflows();
       onClose();
+      toast.success("Workflow created successfully", {
+        position: "top-center",
+        closeButton: true,
+      });
     } catch {
       toast.error("Failed to create workflow", {
         position: "top-center",
@@ -45,13 +49,14 @@ export function CreateWorkflow() {
 
   const onClose = () => {
     reset();
+    setOpen(false);
   };
 
   return (
     <>
-      <Drawer direction="right">
+      <Drawer direction="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button size="lg" className="font-bold">
+          <Button size="lg" className="font-bold" onClick={() => setOpen(true)}>
             <IconGitBranch /> Add Workflow
           </Button>
         </DrawerTrigger>
