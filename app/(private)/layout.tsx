@@ -1,3 +1,4 @@
+import { Header } from "@/components/header";
 import { EndpointProvider } from "@/lib/endpoint/provider";
 import { ProjectProvider } from "@/lib/project/provider";
 import { StepProvider } from "@/lib/step/provider";
@@ -17,6 +18,7 @@ export default function PrivateLayout({
           <EndpointProvider>
             <WorkflowProvider>
               <StepProvider>
+                <Header />
                 <div className="mx-auto px-0">{children}</div>
               </StepProvider>
             </WorkflowProvider>
