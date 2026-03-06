@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { useWorkflow } from "@/lib/workflow/context";
 import { postWorkflowSchema } from "@/lib/workflow/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconGitBranch } from "@tabler/icons-react";
+import { LayersPlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -56,13 +56,18 @@ export function CreateWorkflow() {
       <Drawer direction="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button size="lg" className="font-bold" onClick={() => setOpen(true)}>
-            <IconGitBranch /> Add Workflow
+            <LayersPlusIcon /> Add Workflow
           </Button>
         </DrawerTrigger>
         <DrawerContent className="flex flex-col">
-          <DrawerHeader>
-            <DrawerTitle>Workflow</DrawerTitle>
-            <DrawerDescription>Add a new workflow</DrawerDescription>
+          <DrawerHeader className="flex flex-row items-center gap-2">
+            <div className="rounded-full bg-primary text-primary-foreground p-2">
+              <LayersPlusIcon />
+            </div>
+            <div className="flex flex-col ml-2">
+              <DrawerTitle>Workflow</DrawerTitle>
+              <DrawerDescription>Add a new workflow</DrawerDescription>
+            </div>
           </DrawerHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col min-h-0">
             <div className="flex-1 overflow-y-auto min-h-0">

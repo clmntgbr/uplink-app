@@ -5,7 +5,7 @@ import { JsonObject } from "@/lib/json";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconGitBranch } from "@tabler/icons-react";
+import { LinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -78,13 +78,18 @@ export function CreateEndpoint() {
       <Drawer direction="right" open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <Button size="lg" className="font-bold" variant="outline" onClick={() => setOpen(true)}>
-            <IconGitBranch /> Create Endpoint
+            <LinkIcon /> Create Endpoint
           </Button>
         </DrawerTrigger>
         <DrawerContent className="flex flex-col">
-          <DrawerHeader>
-            <DrawerTitle>Endpoint</DrawerTitle>
-            <DrawerDescription>Create a new endpoint</DrawerDescription>
+          <DrawerHeader className="flex flex-row items-center gap-2">
+            <div className="rounded-full bg-primary text-primary-foreground p-2">
+              <LinkIcon />
+            </div>
+            <div className="flex flex-col ml-2">
+              <DrawerTitle>Endpoint</DrawerTitle>
+              <DrawerDescription>Create a new endpoint</DrawerDescription>
+            </div>
           </DrawerHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col min-h-0">
             <div className="flex-1 overflow-y-auto min-h-0">
