@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { handleLogout } from "@/lib/auth/api";
 import { useUser } from "@/lib/user/context";
 import { BadgeCheckIcon, BellIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ export function UserMenu() {
   const router = useRouter();
   const { user } = useUser();
 
-  async function handleLogout() {
+  async function logout() {
     await handleLogout();
     router.push("/login");
   }
@@ -56,7 +57,7 @@ export function UserMenu() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
+        <DropdownMenuItem onClick={logout}>
           <LogOutIcon />
           Sign Out
         </DropdownMenuItem>
