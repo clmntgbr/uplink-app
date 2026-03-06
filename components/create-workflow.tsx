@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
 import { useWorkflow } from "@/lib/workflow/context";
 import { postWorkflowSchema } from "@/lib/workflow/schema";
@@ -6,7 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IconGitBranch } from "@tabler/icons-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
 import { Field, FieldDescription, FieldLabel } from "./ui/field";
@@ -32,16 +32,9 @@ export function CreateWorkflow() {
       setIsSubmitting(true);
       await postWorkflow({ name: data.name, description: data.description || "" });
       onClose();
-      toast.success("Workflow created successfully", {
-        position: "top-center",
-        closeButton: true,
-      });
+      toast.success("Workflow created successfully");
     } catch {
-      toast.error("Failed to create workflow", {
-        position: "top-center",
-        description: "Please try again",
-        closeButton: true,
-      });
+      toast.error("Failed to create workflow");
     } finally {
       setIsSubmitting(false);
     }
