@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react";
 import { Paginate } from "../paginate";
-import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PostStepsPositionPayload, PutStepPayload, Step, StepState } from "./types";
+import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PutStepPayload, PutStepsReorderPayload, Step, StepState } from "./types";
 
 export interface StepContextType extends StepState {
   getSteps: (workflowId: string) => Promise<Paginate<Step>>;
@@ -10,7 +10,7 @@ export interface StepContextType extends StepState {
   putStep: (payload: PutStepPayload) => Promise<void>;
   deleteStep: (payload: DeleteStepPayload) => Promise<void>;
   duplicateStep: (payload: DuplicateStepPayload) => Promise<void>;
-  postStepsPosition: (payload: PostStepsPositionPayload) => Promise<void>;
+  postStepsPosition: (payload: PutStepsReorderPayload) => Promise<void>;
 }
 
 export const StepContext = createContext<StepContextType | undefined>(undefined);

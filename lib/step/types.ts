@@ -23,7 +23,7 @@ export interface PostStepPayload {
   setVariables?: Record<string, string>;
 }
 
-export interface PostStepsPositionPayload {
+export interface PutStepsReorderPayload {
   workflowId: string;
   steps: { stepId: string; position: number }[];
 }

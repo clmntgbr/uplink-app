@@ -2,10 +2,10 @@
 
 import { useCallback, useReducer } from "react";
 import { Paginate } from "../paginate";
-import { handleDeleteStep, handleDuplicateStep, handleGetSteps, handlePostStep, handlePostStepsPosition, handlePutStep } from "./api";
+import { handleDeleteStep, handleDuplicateStep, handleGetSteps, handlePostStep, handlePutStep, handlePutStepsReorder } from "./api";
 import { StepContext } from "./context";
 import { StepReducer } from "./reducer";
-import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PostStepsPositionPayload, PutStepPayload, Step, StepState } from "./types";
+import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PutStepPayload, PutStepsReorderPayload, Step, StepState } from "./types";
 
 const initialState: StepState = {
   isLoading: false,
@@ -51,10 +51,10 @@ export function StepProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const postStepsPosition = useCallback(async (payload: PostStepsPositionPayload) => {
+  const postStepsPosition = useCallback(async (payload: PutStepsReorderPayload) => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
-      await handlePostStepsPosition(payload);
+      await handlePutStepsReorder(payload);
     } catch {
       dispatch({ type: "SET_ERROR", payload: "Failed to update step position" });
     } finally {

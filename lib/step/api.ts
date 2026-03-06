@@ -1,5 +1,5 @@
 import { Paginate } from "@/lib/paginate";
-import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PostStepsPositionPayload, PutStepPayload, Step } from "./types";
+import { DeleteStepPayload, DuplicateStepPayload, PostStepPayload, PutStepPayload, PutStepsReorderPayload, Step } from "./types";
 
 export const handleGetSteps = async (workflowId: string): Promise<Paginate<Step>> => {
   const response = await fetch(`/api/workflows/${workflowId}/steps?itemsPerPage=100`, {
@@ -30,9 +30,9 @@ export const handlePostStep = async (payload: PostStepPayload): Promise<void> =>
   }
 };
 
-export const handlePostStepsPosition = async (payload: PostStepsPositionPayload): Promise<void> => {
-  const response = await fetch(`/api/workflows/${payload.workflowId}/steps/position`, {
-    method: "POST",
+export const handlePutStepsReorder = async (payload: PutStepsReorderPayload): Promise<void> => {
+  const response = await fetch(`/api/workflows/${payload.workflowId}/steps/reorder`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
@@ -40,7 +40,7 @@ export const handlePostStepsPosition = async (payload: PostStepsPositionPayload)
   });
 
   if (!response.ok) {
-    throw new Error("Failed to update steps position");
+    throw new Error("Failed to update steps reorder");
   }
 };
 
