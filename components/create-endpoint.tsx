@@ -4,7 +4,11 @@ import { postEndpointSchema } from "@/lib/endpoint/schema";
 import { JsonObject } from "@/lib/json";
 import { toast } from "@/lib/toast";
 import { cn } from "@/lib/utils";
+import { json, jsonParseLinter } from "@codemirror/lang-json";
+import { linter, lintGutter } from "@codemirror/lint";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
+import CodeMirror, { Extension } from "@uiw/react-codemirror";
 import { LinkIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,11 +19,18 @@ import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
+const themeMap: Record<string, Extension | undefined> = {
+  Default: undefined,
+  "Github Light": githubLight,
+  "Github Dark": githubDark,
+};
+
 export function CreateEndpoint() {
   const { postEndpoint } = useEndpoint();
 
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   const {
     register,
@@ -166,12 +177,13 @@ export function CreateEndpoint() {
                 </div>
               </TabsContent>
               <TabsContent value="headers" className="pt-6">
-                <div>
-                  <h3 className="mb-2 text-lg font-semibold">Headers</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Dive deep into your data with detailed analytics, trends, and insights to help you make informed decisions.
-                  </p>
-                </div>
+                <CodeMirror
+                  className="border"
+                  theme={themeMap?.["Github Light"]}
+                  value={JSON.stringify({})}
+                  width="100%"
+                  extensions={[json(), linter(jsonParseLinter()), lintGutter()]}
+                />
               </TabsContent>
               <TabsContent value="body" className="pt-6">
                 <div>
