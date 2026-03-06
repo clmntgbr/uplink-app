@@ -8,9 +8,9 @@ export interface Endpoint {
   baseUri: string;
   path: string;
   method: string;
-  header: Record<string, string>;
+  header: JsonObject;
   body: JsonObject;
-  query: Record<string, string>;
+  query: JsonObject;
   timeoutSeconds: number;
 }
 
@@ -19,9 +19,9 @@ export interface PostEndpointPayload {
   baseUri: string;
   path: string;
   method: string;
-  header: Record<string, string>;
+  header: JsonObject;
   body: JsonObject;
-  query: Record<string, string>;
+  query: JsonObject;
   timeout: number;
 }
 

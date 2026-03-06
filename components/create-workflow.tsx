@@ -5,7 +5,7 @@ import { useWorkflow } from "@/lib/workflow/context";
 import { postWorkflowSchema } from "@/lib/workflow/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconGitBranch } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "./ui/drawer";
@@ -44,6 +44,12 @@ export function CreateWorkflow() {
     reset();
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (open) {
+      reset();
+    }
+  }, [open, reset]);
 
   return (
     <>
