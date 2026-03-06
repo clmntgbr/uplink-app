@@ -27,9 +27,11 @@ export const handlePostProject = async (payload: PostProjectPayload): Promise<Pr
 };
 
 export const handlePostActivateProject = async (payload: PostActivateProjectPayload): Promise<Project> => {
-  const response = await fetch(`/api/projects/activate`, {
+  const response = await fetch(`/api/projects/${payload.projectId}/activate`, {
     method: "POST",
-    body: JSON.stringify(payload),
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {
