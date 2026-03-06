@@ -71,7 +71,7 @@ export function CreateWorkflow() {
           </DrawerHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col min-h-0">
             <div className="flex-1 overflow-y-auto min-h-0">
-              <div className="flex flex-col gap-8 p-4">
+              <div className="flex flex-col gap-6 p-4">
                 <Field>
                   <FieldLabel htmlFor="name" className={cn(errors.name && "text-destructive")}>
                     Name

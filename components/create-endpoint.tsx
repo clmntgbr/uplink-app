@@ -13,6 +13,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, Dr
 import { Field, FieldDescription, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export function CreateEndpoint() {
   const { postEndpoint } = useEndpoint();
@@ -81,7 +82,7 @@ export function CreateEndpoint() {
             <LinkIcon /> Create Endpoint
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="flex flex-col">
+        <DrawerContent className="flex flex-col max-w-[30%]! w-[30%]!">
           <DrawerHeader className="flex flex-row items-center gap-2">
             <div className="rounded-full bg-primary text-primary-foreground p-2">
               <LinkIcon />
@@ -92,69 +93,104 @@ export function CreateEndpoint() {
             </div>
           </DrawerHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col min-h-0">
-            <div className="flex-1 overflow-y-auto min-h-0">
-              <div className="flex flex-col gap-8 p-4">
-                <Field>
-                  <FieldLabel htmlFor="name" className={cn(errors.name && "text-destructive")}>
-                    Name
-                  </FieldLabel>
-                  <Input id="name" {...register("name")} className="w-full shadow-none" placeholder="Endpoint name" />
-                  <FieldDescription className={cn(errors.name && "text-destructive")}>Choose a unique name for your endpoint.</FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="baseUri" className={cn(errors.baseUri && "text-destructive")}>
-                    Base URI
-                  </FieldLabel>
-                  <Input id="baseUri" {...register("baseUri")} className="w-full shadow-none" placeholder="https://api.example.com" />
-                  <FieldDescription className={cn(errors.baseUri && "text-destructive")}>Enter the base URI of your endpoint.</FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="path" className={cn(errors.path && "text-destructive")}>
-                    Path
-                  </FieldLabel>
-                  <Input id="path" {...register("path")} className="w-full shadow-none" placeholder="/api/v1/endpoint" />
-                  <FieldDescription className={cn(errors.path && "text-destructive")}>Enter the path of your endpoint.</FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="method" className={cn(errors.method && "text-destructive")}>
-                    Method
-                  </FieldLabel>
-                  <Controller
-                    name="method"
-                    control={control}
-                    render={({ field }) => (
-                      <Select value={field.value || ""} onValueChange={field.onChange}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a method" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="GET">GET</SelectItem>
-                          <SelectItem value="POST">POST</SelectItem>
-                          <SelectItem value="PUT">PUT</SelectItem>
-                          <SelectItem value="DELETE">DELETE</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  <FieldDescription className={cn(errors.method && "text-destructive")}>Select the method of your endpoint.</FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="timeoutSeconds" className={cn(errors.timeoutSeconds && "text-destructive")}>
-                    Timeout
-                  </FieldLabel>
-                  <Input
-                    id="timeoutSeconds"
-                    {...register("timeoutSeconds", { valueAsNumber: true })}
-                    className="w-full shadow-none"
-                    placeholder="10"
-                    type="number"
-                  />
-                  <FieldDescription className={cn(errors.timeoutSeconds && "text-destructive")}>
-                    Enter the timeout in seconds of your endpoint.
-                  </FieldDescription>
-                </Field>
-              </div>
-            </div>
+            <Tabs className="w-full px-4" defaultValue="configuration">
+              <TabsList className="w-full">
+                <TabsTrigger value="configuration">Configuration</TabsTrigger>
+                <TabsTrigger value="headers">Headers</TabsTrigger>
+                <TabsTrigger value="body">Body</TabsTrigger>
+                <TabsTrigger value="query">Query</TabsTrigger>
+              </TabsList>
+              <TabsContent value="configuration" className="pt-6">
+                <div className="flex flex-col gap-6">
+                  <Field>
+                    <FieldLabel htmlFor="name" className={cn(errors.name && "text-destructive")}>
+                      Name
+                    </FieldLabel>
+                    <Input id="name" {...register("name")} className="w-full shadow-none" placeholder="Endpoint name" />
+                    <FieldDescription className={cn(errors.name && "text-destructive")}>Choose a unique name for your endpoint.</FieldDescription>
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="baseUri" className={cn(errors.baseUri && "text-destructive")}>
+                      Base URI
+                    </FieldLabel>
+                    <Input id="baseUri" {...register("baseUri")} className="w-full shadow-none" placeholder="https://api.example.com" />
+                    <FieldDescription className={cn(errors.baseUri && "text-destructive")}>Enter the base URI of your endpoint.</FieldDescription>
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="path" className={cn(errors.path && "text-destructive")}>
+                      Path
+                    </FieldLabel>
+                    <Input id="path" {...register("path")} className="w-full shadow-none" placeholder="/api/v1/endpoint" />
+                    <FieldDescription className={cn(errors.path && "text-destructive")}>Enter the path of your endpoint.</FieldDescription>
+                  </Field>
+                  <div className="flex gap-4">
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="method" className={cn(errors.method && "text-destructive")}>
+                        Method
+                      </FieldLabel>
+                      <Controller
+                        name="method"
+                        control={control}
+                        render={({ field }) => (
+                          <Select value={field.value || ""} onValueChange={field.onChange}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a method" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="GET">GET</SelectItem>
+                              <SelectItem value="POST">POST</SelectItem>
+                              <SelectItem value="PUT">PUT</SelectItem>
+                              <SelectItem value="DELETE">DELETE</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                      <FieldDescription className={cn(errors.method && "text-destructive")}>Select the method of your endpoint.</FieldDescription>
+                    </Field>
+                    <Field className="flex-1">
+                      <FieldLabel htmlFor="timeoutSeconds" className={cn(errors.timeoutSeconds && "text-destructive")}>
+                        Timeout
+                      </FieldLabel>
+                      <Input
+                        id="timeoutSeconds"
+                        {...register("timeoutSeconds", { valueAsNumber: true })}
+                        className="w-full shadow-none"
+                        placeholder="10"
+                        type="number"
+                      />
+                      <FieldDescription className={cn(errors.timeoutSeconds && "text-destructive")}>
+                        Enter the timeout in seconds of your endpoint.
+                      </FieldDescription>
+                    </Field>
+                  </div>
+                </div>
+              </TabsContent>
+              <TabsContent value="headers" className="pt-6">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Headers</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Dive deep into your data with detailed analytics, trends, and insights to help you make informed decisions.
+                  </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="body" className="pt-6">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Body</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Generate and view comprehensive reports on various aspects of your account performance and activity.
+                  </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="query" className="pt-6">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Query</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Manage your notification preferences and view recent alerts and updates from your account.
+                  </p>
+                </div>
+              </TabsContent>
+            </Tabs>
+
             <DrawerFooter className="border-t mt-auto shrink-0">
               <Button className="w-full" variant="default" type="submit" disabled={isSubmitting}>
                 Create
