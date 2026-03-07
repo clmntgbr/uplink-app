@@ -221,11 +221,35 @@ export function CreateEndpoint() {
                 </div>
               </TabsContent>
               <TabsContent value="headers" className="">
-                <div>
-                  <h3 className="mb-2 text-lg font-semibold">Headers</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Manage your headers preferences and view recent alerts and updates from your account.
-                  </p>
+                <div className="flex gap-4">
+                  <Field className="flex-1">
+                    <FieldLabel htmlFor="method" className={cn(errors.method && "text-destructive")}>
+                      Key
+                    </FieldLabel>
+                    <Input
+                      id="timeoutSeconds"
+                      {...register("timeoutSeconds", { valueAsNumber: true })}
+                      className="w-full shadow-none"
+                      placeholder="10"
+                      type="string"
+                    />
+                    <FieldDescription className={cn(errors.method && "text-destructive")}>Select the method of your endpoint.</FieldDescription>
+                  </Field>
+                  <Field className="flex-1">
+                    <FieldLabel htmlFor="timeoutSeconds" className={cn(errors.timeoutSeconds && "text-destructive")}>
+                      Value
+                    </FieldLabel>
+                    <Input
+                      id="timeoutSeconds"
+                      {...register("timeoutSeconds", { valueAsNumber: true })}
+                      className="w-full shadow-none"
+                      placeholder="10"
+                      type="string"
+                    />
+                    <FieldDescription className={cn(errors.timeoutSeconds && "text-destructive")}>
+                      Enter the timeout in seconds of your endpoint.
+                    </FieldDescription>
+                  </Field>
                 </div>
               </TabsContent>
               <TabsContent value="body" className="flex flex-1 min-h-0 flex-col overflow-hidden data-[state=active]:flex pb-2">
