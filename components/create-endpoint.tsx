@@ -29,6 +29,7 @@ export function CreateEndpoint() {
   const [activeTab, setActiveTab] = useState("configuration");
   const [bodyRaw, setBodyRaw] = useState("{}");
   const bodyIsValidRef = useRef(true);
+  const headerIsValidRef = useRef(true);
 
   const {
     register,
@@ -62,11 +63,24 @@ export function CreateEndpoint() {
 
   const onSubmit = async (data: FormValues) => {
     if (!bodyIsValidRef.current) {
-      setActiveTab("body");
       return;
     }
 
-    const header = data.header;
+    const header = data.header ?? {};
+    const headerEntries = Object.values(header) as { key: string; value: string }[];
+    headerIsValidRef.current = headerEntries.every((entry) => (!entry.key && !entry.value) || Boolean(entry.key && entry.value));
+
+    if (!headerIsValidRef.current) {
+      setActiveTab("headers");
+      return;
+    }
+
+    const headerObject: JsonObject = {};
+    for (const entry of headerEntries) {
+      if (entry.key && entry.value) {
+        headerObject[entry.key] = entry.value;
+      }
+    }
 
     try {
       setIsSubmitting(true);
@@ -78,7 +92,7 @@ export function CreateEndpoint() {
         timeout: data.timeoutSeconds,
         body: data.body as JsonObject,
         query: data.query as JsonObject,
-        header: header as JsonObject,
+        header: headerObject,
       });
       onClose();
       toast.success("Endpoint created successfully");
@@ -132,6 +146,11 @@ export function CreateEndpoint() {
 
     if (!bodyIsValidRef.current) {
       setActiveTab("body");
+      return;
+    }
+
+    if (!headerIsValidRef.current) {
+      setActiveTab("headers");
       return;
     }
   };
@@ -238,12 +257,12 @@ export function CreateEndpoint() {
                 {headerFields.length > 0 && (
                   <div className="flex gap-2">
                     <span className="flex-1">
-                      <FieldLabel htmlFor="header.key" className={cn(errors.header && "text-destructive")}>
+                      <FieldLabel htmlFor="header.key" className={cn(!headerIsValidRef.current && "text-destructive")}>
                         Key
                       </FieldLabel>
                     </span>
                     <span className="flex-1">
-                      <FieldLabel htmlFor="header.value" className={cn(errors.header && "text-destructive")}>
+                      <FieldLabel htmlFor="header.value" className={cn(!headerIsValidRef.current && "text-destructive")}>
                         Value
                       </FieldLabel>
                     </span>
@@ -252,8 +271,8 @@ export function CreateEndpoint() {
                 )}
                 {headerFields.map((field, index) => (
                   <div key={field.id} className="flex gap-2 items-center">
-                    <Input {...register(`header.${index}.key`)} className="flex-1 shadow-none" placeholder="X-Api-Key" />
-                    <Input {...register(`header.${index}.value`)} className="flex-1 shadow-none" placeholder="value" />
+                    <Input {...register(`header.${index}.key`)} className="flex-1 shadow-none" placeholder="Key" />
+                    <Input {...register(`header.${index}.value`)} className="flex-1 shadow-none" placeholder="Value" />
                     <Button
                       type="button"
                       variant="ghost"
