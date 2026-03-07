@@ -30,13 +30,17 @@ export function CreateEndpoint() {
 
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+  const [activeTab, setActiveTab] = useState("configuration");
+  const [bodyRawValue, setBodyRawValue] = useState<string | null>(null);
 
   const {
     register,
     control,
     handleSubmit,
     reset,
+    setValue,
+    watch,
+    clearErrors,
     formState: { errors },
   } = useForm<z.input<typeof postEndpointSchema>, void, z.output<typeof postEndpointSchema>>({
     resolver: zodResolver(postEndpointSchema),
@@ -82,8 +86,33 @@ export function CreateEndpoint() {
   useEffect(() => {
     if (open) {
       reset();
+      setActiveTab("configuration");
+      setBodyRawValue(null);
     }
   }, [open, reset]);
+
+  const onChange = (value: string) => {
+    if (value.trim() === "") {
+      setValue("body", {});
+      setBodyRawValue(null);
+      clearErrors("body");
+      return;
+    }
+    try {
+      const parsed = JSON.parse(value);
+      if (typeof parsed === "object" && parsed !== null) {
+        setValue("body", parsed);
+        setBodyRawValue(null);
+        clearErrors("body");
+      } else {
+        setValue("body", null as unknown as z.output<typeof postEndpointSchema>["body"]);
+        setBodyRawValue(value);
+      }
+    } catch {
+      setValue("body", null as unknown as z.output<typeof postEndpointSchema>["body"]);
+      setBodyRawValue(value);
+    }
+  };
 
   return (
     <>
@@ -104,12 +133,12 @@ export function CreateEndpoint() {
             </div>
           </DrawerHeader>
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-1 flex-col min-h-0">
-            <Tabs className="w-full px-4" defaultValue="configuration">
-              <TabsList className="w-full">
+            <Tabs className="flex flex-1 min-h-0 w-full flex-col overflow-hidden px-4" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="w-full shrink-0">
                 <TabsTrigger value="configuration">Configuration</TabsTrigger>
+                <TabsTrigger value="query">Query</TabsTrigger>
                 <TabsTrigger value="headers">Headers</TabsTrigger>
                 <TabsTrigger value="body">Body</TabsTrigger>
-                <TabsTrigger value="query">Query</TabsTrigger>
               </TabsList>
               <TabsContent value="configuration" className="">
                 <div className="flex flex-col gap-6">
@@ -176,29 +205,34 @@ export function CreateEndpoint() {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="headers" className="">
-                <CodeMirror
-                  className="border h-full"
-                  theme={themeMap?.["Github Light"]}
-                  value={JSON.stringify({})}
-                  width="100%"
-                  extensions={[json(), linter(jsonParseLinter()), lintGutter()]}
-                />
-              </TabsContent>
-              <TabsContent value="body" className="">
-                <div>
-                  <h3 className="mb-2 text-lg font-semibold">Body</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Generate and view comprehensive reports on various aspects of your account performance and activity.
-                  </p>
-                </div>
-              </TabsContent>
               <TabsContent value="query" className="">
                 <div>
                   <h3 className="mb-2 text-lg font-semibold">Query</h3>
                   <p className="text-sm text-muted-foreground">
                     Manage your notification preferences and view recent alerts and updates from your account.
                   </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="headers" className="">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">Headers</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Manage your headers preferences and view recent alerts and updates from your account.
+                  </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="body" className="flex flex-1 min-h-0 flex-col overflow-hidden data-[state=active]:flex pb-2">
+                {errors.body && <p className="mb-2 text-sm text-destructive">{errors.body.message}</p>}
+                <div className="flex-1 min-h-0 overflow-hidden">
+                  <CodeMirror
+                    className="border h-full w-full"
+                    theme={themeMap?.["Github Light"]}
+                    onChange={onChange}
+                    value={bodyRawValue ?? JSON.stringify(watch("body") ?? {}, null, 2)}
+                    width="100%"
+                    height="100%"
+                    extensions={[json(), linter(jsonParseLinter()), lintGutter()]}
+                  />
                 </div>
               </TabsContent>
             </Tabs>
