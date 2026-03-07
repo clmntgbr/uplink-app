@@ -114,6 +114,13 @@ export function CreateEndpoint() {
     }
   };
 
+  const onSubmitting = () => {
+    const errorKeys = Object.keys(errors);
+    if (errorKeys.length === 1 && errors.body) {
+      setActiveTab("body");
+    }
+  };
+
   return (
     <>
       <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -222,7 +229,6 @@ export function CreateEndpoint() {
                 </div>
               </TabsContent>
               <TabsContent value="body" className="flex flex-1 min-h-0 flex-col overflow-hidden data-[state=active]:flex pb-2">
-                {errors.body && <p className="mb-2 text-sm text-destructive">{errors.body.message}</p>}
                 <div className="flex-1 min-h-0 overflow-hidden">
                   <CodeMirror
                     className="border h-full w-full"
@@ -238,7 +244,7 @@ export function CreateEndpoint() {
             </Tabs>
 
             <DrawerFooter className="border-t mt-auto shrink-0">
-              <Button className="w-full" variant="default" type="submit" disabled={isSubmitting}>
+              <Button className="w-full" variant="default" type="submit" disabled={isSubmitting} onClick={onSubmitting}>
                 Create
               </Button>
               <DrawerClose asChild onClick={onClose}>
