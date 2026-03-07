@@ -14,11 +14,7 @@ export const postEndpointSchema = z.object({
     .int("Timeout must be an integer")
     .min(1, "Timeout must be at least 1 second")
     .max(300, "Timeout must be at most 300 seconds"),
-  body: z
-    .union([z.record(z.string(), z.unknown()), z.array(z.unknown()), z.null()])
-    .optional()
-    .default({})
-    .refine((val) => val !== null, { message: "Invalid JSON" }),
-  query: z.record(z.string(), z.string()).optional().default({}),
-  header: z.record(z.string(), z.string()).optional().default({}),
+  body: z.any(),
+  query: z.any(),
+  header: z.any(),
 });
