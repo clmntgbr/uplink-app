@@ -111,7 +111,7 @@ export function CreateEndpoint() {
                 <TabsTrigger value="body">Body</TabsTrigger>
                 <TabsTrigger value="query">Query</TabsTrigger>
               </TabsList>
-              <TabsContent value="configuration" className="pt-6">
+              <TabsContent value="configuration" className="">
                 <div className="flex flex-col gap-6">
                   <Field>
                     <FieldLabel htmlFor="name" className={cn(errors.name && "text-destructive")}>
@@ -176,16 +176,16 @@ export function CreateEndpoint() {
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="headers" className="pt-6">
+              <TabsContent value="headers" className="">
                 <CodeMirror
-                  className="border"
+                  className="border h-full"
                   theme={themeMap?.["Github Light"]}
                   value={JSON.stringify({})}
                   width="100%"
                   extensions={[json(), linter(jsonParseLinter()), lintGutter()]}
                 />
               </TabsContent>
-              <TabsContent value="body" className="pt-6">
+              <TabsContent value="body" className="">
                 <div>
                   <h3 className="mb-2 text-lg font-semibold">Body</h3>
                   <p className="text-sm text-muted-foreground">
@@ -193,7 +193,7 @@ export function CreateEndpoint() {
                   </p>
                 </div>
               </TabsContent>
-              <TabsContent value="query" className="pt-6">
+              <TabsContent value="query" className="">
                 <div>
                   <h3 className="mb-2 text-lg font-semibold">Query</h3>
                   <p className="text-sm text-muted-foreground">
