@@ -129,7 +129,7 @@ export function CreateEndpoint() {
             <LinkIcon /> Create Endpoint
           </Button>
         </DrawerTrigger>
-        <DrawerContent className="flex flex-col max-w-[30%]! w-[30%]!">
+        <DrawerContent className="flex flex-col max-w-[35vw]! w-[35vw]!">
           <DrawerHeader className="flex flex-row items-center gap-2">
             <div className="rounded-full bg-primary text-primary-foreground p-2">
               <LinkIcon />
